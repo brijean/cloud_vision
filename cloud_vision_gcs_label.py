@@ -1,16 +1,23 @@
 #!/usr/bin/python
 
+import sys
 from google.cloud import vision
 from google.cloud import storage
 
 
+def validate_input():
+    if len(sys.argv) != 2:
+        print "Proper syntax is:", sys.argv[0], "<google-cloud-storage-bucket>\n"
+        bucket = raw_input("Enter GCS Bucket name:")
+    else:
+        bucket = sys.argv[1]
+    return bucket
+    
 def list_blobs(bucket_name):
     """Lists all the blobs in the bucket."""
     storage_client = storage.Client()
     bucket = storage_client.get_bucket(bucket_name)
     blobs = bucket.list_blobs()
-    #for blob in blobs:
-    #    print(blob.name)
     return blobs
         
 
@@ -28,8 +35,8 @@ def detect_labels_uri(uri):
         print(label.description)
 
 def main():
-  print "Enumerate Objects in Bucket"
-  object_list = list_blobs("bookshelf-application-223720-vision")
+  bucket = validate_input()
+  object_list = list_blobs(bucket)
   print "Labeling Images with CloudVision"
   for object in object_list:
       object = "https://storage.googleapis.com/bookshelf-application-223720-vision/" + object.name
