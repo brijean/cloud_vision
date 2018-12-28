@@ -39,7 +39,7 @@ def main():
   object_list = list_blobs(bucket)
   print "Labeling Images with CloudVision"
   for object in object_list:
-      object = "https://storage.googleapis.com/bookshelf-application-223720-vision/" + object.name
+      object = "https://storage.googleapis.com/" + bucket + "/" + object.name
       print "Object: " + object
       detect_labels_uri(object)
   
